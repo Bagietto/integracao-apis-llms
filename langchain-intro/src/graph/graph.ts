@@ -6,6 +6,7 @@ import { identifyIntentNode } from "./nodes/identifyIntentNode.ts";
 import { chatResponseNode } from "./nodes/chatResponseNode.ts";
 import { upperCaseNode } from "./nodes/upperCaseNode.ts";
 import { lowerCaseNode } from "./nodes/lowerCaseNode.ts";
+import { fallbackNode } from "./nodes/fallbackNode.ts";
 
 const GraphState = z.object({
     messages:withLangGraph(z.custom<BaseMessage[]>(),
@@ -27,6 +28,7 @@ export function buildGraph()
     .addNode("chatResponse", chatResponseNode)
     .addNode("upperCase", upperCaseNode)
     .addNode("lowerCase", lowerCaseNode)
+    .addNode("fallback", fallbackNode)
 
     // .addNode("identifyIntent", (state: GraphState) => {
     //     const lastMessage = state.messages[state.messages.length - 1];
@@ -53,10 +55,12 @@ export function buildGraph()
     },
     {       
        "upperCase": "upperCase",
-       "lowerCase": "lowerCase"
+       "lowerCase": "lowerCase",
+         "fallback": "fallback"
     })
     .addEdge("upperCase","chatResponse")
     .addEdge("lowerCase","chatResponse")
+    .addEdge("fallback","chatResponse")
     .addEdge("chatResponse",END);
 
 
